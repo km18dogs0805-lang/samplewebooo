@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Main_Page</title>
+</head>
+<body class="container">
+    <h1 th:text="${title}">メインページ</h1>
+    <form method="post" action="result" th:object="${formModel}">
+        <!-- コンテンツのタイトル -->
+        <div class="mb-3">
+            <label for="name" class="form-label">タイトル：</label>
+            <input type="text" class="form-control" name="name" th:value="${name}" required />
+        </div>
+        <!-- 価格 -->
+        <div class="mb-3">
+            <label for="price" class="form-label">価格：</label>
+            <input type="text" class="form-control" name="price" th:value="${price}" required />
+        </div>
+        <!-- 数量 -->
+         <div class="mb-3">
+            <label for="volume" class="form-label">数量：</label>
+            <input type="number" class="form-control" name="volume" th:value="${volume}" required />
+         </div>
+        <input type="submit" class="btn btn-primary px-4" value="Create" />
+        <input type="submit" class="btn btn-primary px-4" value="合計" />
+    </form>
+
+    <!-- 投稿コンテンツ表示テーブル -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>タイトル</th>
+                <th>価格（￥）</th>
+                <th>数量</th>
+            </tr>
+        </thead>
+        <!-- データを表示するテーブル -->
+        <tbody>
+            <tr th:each="item : ${data}">
+                <td th:text="${item.id}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.volume}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
