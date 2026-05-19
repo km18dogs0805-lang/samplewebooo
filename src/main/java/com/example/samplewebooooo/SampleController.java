@@ -3,6 +3,7 @@ package com.example.samplewebooooo;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,19 +27,25 @@ public class SampleController {
     @Autowired
     ItemRepository repository;
 
+    @Autowired
+    ItemDAOPersonImpl dao;
+
     @RequestMapping("/")
     public ModelAndView mainDisplay(ModelAndView mav
                                     ) {
         
-        //mav.setViewName("main");
+        mav.setViewName("main");
+        
         mav.addObject("title", "Hello!!JPA");
-
+        
         // 全データを取得
         List<Item> list = repository.findAll();
+        //List<Item> list = dao.getAll();
         System.out.println("id : " + repository.count());
+        
         // 全データを表示
         mav.addObject("data", list);
-        mav.setViewName("main");
+    
         return mav;
     }
 
@@ -49,12 +56,15 @@ public class SampleController {
                                       ) 
     {
         //TODO: process POST request
-        
-        // リポジトリを更新
+
+        // エンティティの更新  
         repository.saveAndFlush(Item);
+
         // 全データを表示
         List<Item> list = repository.findAll();
         
+        //Item list = new Item();
+
         mav.addObject("title", "更新しました");
 
         mav.addObject("data", list);
@@ -71,14 +81,19 @@ public class SampleController {
     */
     @PostMapping("/main")
     public ModelAndView postMethodName(@ModelAttribute("formModel") Item item, ModelAndView mav) {
+        
         // タイトルを表示
         mav.addObject("title", "更新結果");
+        
         // DBに存在する全データ
-        List<Item> list = repository.findAll();
+        List<Item> list = dao.getAll();
+
         // デバッグ
-        System.out.println("最後の値は・・・" + list);
+        System.out.println("最後の値は・・・" + dao.getAll());
+        
         // レコードに表示
         mav.addObject("data", list);
+        
         // 更新後のmain.htmlを表示
         mav.setViewName("main");
         return mav;

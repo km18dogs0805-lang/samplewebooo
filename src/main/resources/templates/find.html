@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Boostrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Find_Page</title>
+</head>
+<body>
+    <div class="container">
+        <h1 th:text="${title}">削除します</h1>
+
+        <form method=post action="delete_result" th:object="${formModel}">
+            <label for="name" class="form-label">検索する項目：</label>
+            <input type="text" class="form-label" name="name" th:value="${delete}" />
+            <!-- 検索するボタン -->
+            <input type="submit" class="btn btn-primary px-4" value="検索する" />
+        </form>
+    </div>
+    
+</body>
+</html>
