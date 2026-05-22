@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.samplewebooooo.model.Item;
 import com.example.samplewebooooo.repositories.ItemRepository;
 
 import jakarta.transaction.Transactional;
@@ -99,6 +100,11 @@ public class SampleController {
         return mav;
     }
     
+    // find.html
+    @GetMapping("/find")
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
     
 
 }
