@@ -105,6 +105,16 @@ public class SampleController {
     public String getMethodName(@RequestParam String param) {
         return new String();
     }
+
+    // リポジトリの全データを削除
+    @PostMapping("/delete_result")
+    public String postMethodName(@ModelAttribute("formModel") Item item) {
+        //TODO: process POST request
+        List<Item> list = dao.getAll();
+        dao.deleteById(list);
+        return "delete_result";
+    }
+    
     
 
 }

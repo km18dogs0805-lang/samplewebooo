@@ -24,10 +24,12 @@
             <label for="volume" class="form-label">数量：</label>
             <input type="number" class="form-control" name="volume" th:value="${volume}" required />
          </div>
-        <input type="submit" class="btn btn-primary px-4" value="Create" />
+        <tr>
+                <td><input type="submit" class="btn btn-primary px-4" value="Create" /></td>
+                <td><input type="button" class="btn btn-primary px-4" onclick="deleteList()" value="Delete" /></td>
+        </tr>
+        
     </form>
-
-    <input type="submit" class="btn btn-primary px-4" value="編集する" />
 
     <!-- 投稿コンテンツ表示テーブル -->
     <table class="table">
@@ -41,7 +43,7 @@
         </thead>
         <!-- データを表示するテーブル -->
         <tbody>
-            <tr th:each="item : ${data}">
+            <tr th:each="item : ${data}" class="item_list">
                 <td th:text="${item.id}"></td>
                 <td th:text="${item.name}"></td>
                 <td th:text="${item.price}"></td>
@@ -49,5 +51,21 @@
             </tr>
         </tbody>
     </table>
+    <script th:inline="javascript">
+        function deleteList() {
+            // repositoryの全データを削除
+            fetch('/delete_result', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            // テーブルからデータを削除
+            const itemList = document.querySelectorAll('.item_list');
+            itemList.forEach(item => {
+                item.remove();
+            });
+        }
+    </script>
 </body>
 </html>

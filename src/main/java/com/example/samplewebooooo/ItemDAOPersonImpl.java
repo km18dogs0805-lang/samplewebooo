@@ -45,7 +45,14 @@ public class ItemDAOPersonImpl implements ItemDAO<Item> {
         return (List<Item>)entityManager.createQuery("from Item where name = " + name).getResultList();
     }
 
-    // idを取得
+    // データを削除
+    @Override
+    public void deleteById(List<Item> itemList) {
+        // TODO Auto-generated method stub
+        for (Item item : itemList) {
+            entityManager.remove(entityManager.contains(item) ? item : entityManager.merge(item));
+        }
+    }
     
 
     
