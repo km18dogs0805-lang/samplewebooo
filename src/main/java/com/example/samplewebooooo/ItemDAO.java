@@ -19,4 +19,7 @@ public interface ItemDAO <T> extends Serializable {
     // データを削除
     public void deleteById(long id);
 
+    // データの合計
+    public long totalPrice();
+
 }

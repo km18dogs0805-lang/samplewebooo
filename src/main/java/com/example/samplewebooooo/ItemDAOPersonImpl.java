@@ -35,25 +35,30 @@ public class ItemDAOPersonImpl implements ItemDAO<Item> {
 
     @Override
     public Item findById(long id) {
-        // TODO Auto-generated method stub
-        return (Item)entityManager.createQuery("from Item where id = " + id).getResultList();
+        // idに対応するデータを取得するクエリを実行する
+        return (Item)entityManager.createQuery("from Item where id = " + id).getSingleResult();
     }
 
     @Override
     public List<Item> findByName(String name) {
-        // TODO Auto-generated method stub
+        // nameに対応するデータを取得するクエリを実行する
         return (List<Item>)entityManager.createQuery("from Item where name = " + name).getResultList();
     }
 
     // データを削除
     @Override
     public void deleteById(long id) {
-         // TODO Auto-generated method stub
-        // TODO Auto-generated method stub
+         // idに対応するデータを取得し、削除する
         Item item = findById(id);
         if (item != null) {
             entityManager.remove(item);
         }
+    }
+
+    @Override
+    public long totalPrice() {
+        // データベースから、価格と数量を掛け合わせた値の合計を取得するクエリを実行する
+        return (long)entityManager.createQuery("SELECT SUM(price * volume) FROM Item").getSingleResult();
     }
     
 

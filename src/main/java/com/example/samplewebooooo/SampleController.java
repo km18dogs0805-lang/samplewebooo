@@ -122,6 +122,14 @@ public class SampleController {
         return mav;
     }
     
-    
+    // 合計を表示
+    @PostMapping("/sum_result")
+    public ModelAndView sumMethodName(ModelAndView mav) {
+        mav.setViewName("sum_result");
+        mav.addObject("title", "合計金額");
+        long totalPrice = dao.totalPrice();
+        mav.addObject("totalPrice", totalPrice);
+        return mav;
+    }
 
 }
