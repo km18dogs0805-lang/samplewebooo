@@ -17,6 +17,6 @@ public interface ItemDAO <T> extends Serializable {
     public List<T> findByName(String name);
 
     // データを削除
-    public void deleteById(List<Item> itemList);
+    public void deleteById(long id);
 
 }

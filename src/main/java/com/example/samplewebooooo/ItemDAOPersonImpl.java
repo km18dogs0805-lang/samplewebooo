@@ -47,10 +47,12 @@ public class ItemDAOPersonImpl implements ItemDAO<Item> {
 
     // データを削除
     @Override
-    public void deleteById(List<Item> itemList) {
+    public void deleteById(long id) {
+         // TODO Auto-generated method stub
         // TODO Auto-generated method stub
-        for (Item item : itemList) {
-            entityManager.remove(entityManager.contains(item) ? item : entityManager.merge(item));
+        Item item = findById(id);
+        if (item != null) {
+            entityManager.remove(item);
         }
     }
     

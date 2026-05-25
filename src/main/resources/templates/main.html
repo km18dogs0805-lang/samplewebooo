@@ -39,6 +39,7 @@
                 <th>タイトル</th>
                 <th>価格（￥）</th>
                 <th>数量</th>
+                <th>操作</th>
             </tr>
         </thead>
         <!-- データを表示するテーブル -->
@@ -48,17 +49,20 @@
                 <td th:text="${item.name}"></td>
                 <td th:text="${item.price}"></td>
                 <td th:text="${item.volume}"></td>
+                <td>
+                    <form method="post" th:action="@{'delete_result/' + ${item.id}}">
+                        <input type="submit" class="btn btn-danger px-4" value="Delete" />
+                    </form>
+                </td>
             </tr>
         </tbody>
     </table>
     <script th:inline="javascript">
         function deleteList() {
             // repositoryの全データを削除
-            fetch('/delete_result', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            fetch('delete_result', {
+                method: 'GET'
+                
             })
             // テーブルからデータを削除
             const itemList = document.querySelectorAll('.item_list');

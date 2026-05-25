@@ -6,7 +6,8 @@
     <title>Delete_Result_Page</title>
 </head>
 <body>
-    <h1>削除しました</h1>
-    <button onclick="location.href='/main'">トップへ</button>
+    <h1 th:text="${title}"></h1>
+    <p th:text="${message}"></p>
+    <button onclick="location.href='/'">トップへ</button>
 </body>
 </html>

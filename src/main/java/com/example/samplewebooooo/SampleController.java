@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -107,12 +108,18 @@ public class SampleController {
     }
 
     // リポジトリの全データを削除
-    @PostMapping("/delete_result")
-    public String postMethodName(@ModelAttribute("formModel") Item item) {
-        //TODO: process POST request
-        List<Item> list = dao.getAll();
-        dao.deleteById(list);
-        return "delete_result";
+    @PostMapping("/delete_result/{id}")
+    public ModelAndView getMethodName(@PathVariable long id, ModelAndView mav) {
+        //TODO: process GET request
+        mav.setViewName("delete_result");
+        mav.addObject("title", "削除しますか？");
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            mav.addObject("message", "削除しました");
+        } else {
+            mav.addObject("message", "データが見つかりませんでした");
+        }
+        return mav;
     }
     
     
