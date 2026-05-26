@@ -1,9 +1,7 @@
-package com.example.samplewebooooo;
+package com.example.samplewebooooo.model;
 
 import java.io.Serializable;
 import java.util.List;
-
-import com.example.samplewebooooo.model.Item;
 
 public interface ItemDAO <T> extends Serializable {
 

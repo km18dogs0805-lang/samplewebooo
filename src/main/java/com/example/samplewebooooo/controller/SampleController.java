@@ -1,4 +1,4 @@
-package com.example.samplewebooooo;
+package com.example.samplewebooooo.controller;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.samplewebooooo.model.Item;
+import com.example.samplewebooooo.model.ItemDAOPersonImpl;
 import com.example.samplewebooooo.repositories.ItemRepository;
 
 import jakarta.transaction.Transactional;
@@ -112,9 +113,14 @@ public class SampleController {
     /* 
     *   getMethodName: 検索結果を表示する
     */
-    @GetMapping("/find")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    @GetMapping("/findresult")
+    @Transactional  // トランザクション管理を有効にする
+    public ModelAndView getFindResult(ModelAndView mav) {
+        // タイトル表示
+        mav.addObject("title", "検索結果");
+        
+        return mav;
+
     }
 
     /*

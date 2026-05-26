@@ -24,13 +24,16 @@
             <label for="volume" class="form-label">数量：</label>
             <input type="number" class="form-control" name="volume" th:value="${volume}" />
          </div>
-        <tr>
+        <tr>    
+                <!-- Createボタン -->
                 <td><input type="submit" class="btn btn-primary px-4" value="Create" /></td>
+                <!-- Deleteボタン -->
                 <td><input type="button" class="btn btn-danger px-4" onclick="deleteOfList()" value="Delete" /></td>
                 <!-- 合計ボタンを追加 formationとは、フォームの送信先を指定する属性 -->
                 <td><input type="submit" class="btn btn-primary px-4" formaction="/sum_result" value="合計" /></td>
+                <!-- 検索ボタン -->
+                <td><input type="submit" class="btn btn-info px-4" formaction="/findresult" value="Search" /></td>
         </tr>
-        
     </form>
 
     <!-- 投稿コンテンツ表示テーブル -->
