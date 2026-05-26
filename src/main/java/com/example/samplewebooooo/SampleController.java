@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/* 
+*  SampleController: コントローラークラス
+*/
 @RestController
 public class SampleController {
 
@@ -29,57 +32,61 @@ public class SampleController {
     @Autowired
     ItemRepository repository;
 
+    // データが格納されたDAO
     @Autowired
     ItemDAOPersonImpl dao;
 
+    /* 
+    *   mainDisplay: メイン画面を表示する
+    */
     @RequestMapping("/")
-    public ModelAndView mainDisplay(ModelAndView mav
-                                    ) {
+    public ModelAndView mainDisplay(ModelAndView mav) {
         
+        // main.htmlを表示
         mav.setViewName("main");
         
+        // タイトルを表示
         mav.addObject("title", "Hello!!JPA");
         
         // 全データを取得
         List<Item> list = repository.findAll();
-        //List<Item> list = dao.getAll();
-        System.out.println("id : " + repository.count());
         
         // 全データを表示
         mav.addObject("data", list);
-    
+        
         return mav;
     }
 
+    /* 
+    *   resultDisplay: 更新結果を表示する
+    */
     @PostMapping("/result")
-    @Transactional
+    @Transactional  // トランザクション管理を有効にする
     public ModelAndView resultDisplay(@ModelAttribute("formModel") Item Item,
                                       ModelAndView mav
                                       ) 
     {
-        //TODO: process POST request
 
         // エンティティの更新  
         repository.saveAndFlush(Item);
 
         // 全データを表示
         List<Item> list = repository.findAll();
-        
-        //Item list = new Item();
 
+        // タイトルを表示
         mav.addObject("title", "更新しました");
 
+        // dataに、全データを表示
         mav.addObject("data", list);
 
         // 更新後のresult.htmlを表示
         mav.setViewName("result");
+
         return mav;
     }
-    
-    // 戻る
 
     /* 
-    *   Item item: モデル
+    *   postMethodName: 更新結果を表示する
     */
     @PostMapping("/main")
     public ModelAndView postMethodName(@ModelAttribute("formModel") Item item, ModelAndView mav) {
@@ -98,38 +105,75 @@ public class SampleController {
         
         // 更新後のmain.htmlを表示
         mav.setViewName("main");
+
         return mav;
     }
     
-    // find.html
+    /* 
+    *   getMethodName: 検索結果を表示する
+    */
     @GetMapping("/find")
     public String getMethodName(@RequestParam String param) {
         return new String();
     }
 
-    // リポジトリの全データを削除
+    /*
+    *   getMethodName: 削除結果を表示する
+    */ 
     @PostMapping("/delete_result/{id}")
     public ModelAndView getMethodName(@PathVariable long id, ModelAndView mav) {
-        //TODO: process GET request
+        
+        // 削除後のdelete_result.htmlを表示
         mav.setViewName("delete_result");
+
+        // タイトルを表示
         mav.addObject("title", "削除しますか？");
+        
+        // データが存在するか確認してから削除
         if (repository.existsById(id)) {
+
+            // データが存在する場合は削除
             repository.deleteById(id);
+
+            // 削除後の全データを表示
+            List<Item> list = repository.findAll();
+
+            // 削除完了のメッセージを表示
             mav.addObject("message", "削除しました");
+
+            // dataに、全データを表示
+            mav.addObject("data", list);
+
         } else {
+            
+            // データが存在しない場合はエラーメッセージを表示
             mav.addObject("message", "データが見つかりませんでした");
+            
         }
+
         return mav;
     }
     
-    // 合計を表示
+    /*
+     * 合計金額を表示する
+     */ 
     @PostMapping("/sum_result")
     public ModelAndView sumMethodName(ModelAndView mav) {
+
+        // 合計金額の結果を表示するsum_result.htmlを表示
         mav.setViewName("sum_result");
+
+        // タイトルを表示
         mav.addObject("title", "合計金額");
+
+        // 合計金額を取得
         long totalPrice = dao.totalPrice();
+
+        // 合計金額を表示
         mav.addObject("totalPrice", totalPrice);
+
         return mav;
+
     }
 
 }
