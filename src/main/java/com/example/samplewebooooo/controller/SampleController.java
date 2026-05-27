@@ -17,6 +17,7 @@ import com.example.samplewebooooo.model.Item;
 import com.example.samplewebooooo.model.ItemDAOPersonImpl;
 import com.example.samplewebooooo.repositories.ItemRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,9 +46,6 @@ public class SampleController {
         
         // main.htmlを表示
         mav.setViewName("main");
-        
-        // タイトルを表示
-        mav.addObject("title", "Hello!!JPA");
         
         // 全データを取得
         List<Item> list = repository.findAll();
@@ -88,12 +86,11 @@ public class SampleController {
 
     /* 
     *   postMethodName: 更新結果を表示する
+    *  @param @ModelAttribute("formModel") Item item: フォームから送信されたデータをItemオブジェクトにバインドする
+     *  @param ModelAndView mav: ビューとモデルを管理するオブジェクト
     */
     @PostMapping("/main")
     public ModelAndView postMethodName(@ModelAttribute("formModel") Item item, ModelAndView mav) {
-        
-        // タイトルを表示
-        mav.addObject("title", "更新結果");
         
         // DBに存在する全データ
         List<Item> list = dao.getAll();
@@ -109,18 +106,28 @@ public class SampleController {
 
         return mav;
     }
-    
-    /* 
-    *   getMethodName: 検索結果を表示する
-    */
-    @GetMapping("/findresult")
-    @Transactional  // トランザクション管理を有効にする
-    public ModelAndView getFindResult(ModelAndView mav) {
-        // タイトル表示
-        mav.addObject("title", "検索結果");
-        
-        return mav;
 
+    /**
+     * getResultName: 削除確認の画面を表示する
+     * @param id
+     * @param mav
+     * @return
+     */
+    @GetMapping("/findresult")
+    public ModelAndView findResult(ModelAndView mav
+                                   
+                                  ) {
+        
+        // findresult.htmlを表示
+        mav.setViewName("findresult");
+
+        // データベースから全データを取得
+        List<Item> list = repository.findAll();
+
+        // dataに、全データを表示
+        mav.addObject("items", list);
+
+        return mav;
     }
 
     /*
@@ -172,8 +179,19 @@ public class SampleController {
         // タイトルを表示
         mav.addObject("title", "合計金額");
 
-        // 合計金額を取得
-        long totalPrice = dao.totalPrice();
+        // データの合計金額
+        long totalPrice;
+
+        if (repository.count() > 0) {
+
+            // データが存在する場合は合計金額を取得
+            totalPrice = dao.totalPrice();
+        } else {
+
+            // データが存在しない場合は合計金額を0に設定
+            totalPrice = 0;
+
+        }
 
         // 合計金額を表示
         mav.addObject("totalPrice", totalPrice);

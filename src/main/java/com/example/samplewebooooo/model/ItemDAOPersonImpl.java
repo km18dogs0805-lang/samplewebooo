@@ -52,9 +52,21 @@ public class ItemDAOPersonImpl implements ItemDAO<Item> {
      *   名前でデータを取得する
      */
     @Override
-    public List<Item> findByName(String name) {
+    public List<Item> findByName(String fstr) {
         // nameに対応するデータを取得するクエリを実行する
-        return (List<Item>)entityManager.createQuery("from Item where name = :name").setParameter("name", name).getResultList();
+        List<Item> list = null;
+
+        // クエリを作成する（fstrをパラメータとして渡す）
+        String qstr = "from Item where name = :fstr";
+
+        // クエリを実行する
+        Query query = entityManager.createQuery(qstr)
+                                    .setParameter("fstr", Long.parseLong(fstr));
+        
+        // クエリの結果をリストに格納する
+        list = query.getResultList();
+
+        return list;
     }
 
     /*
