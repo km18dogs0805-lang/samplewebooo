@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -114,29 +116,69 @@ public class SampleController {
      * @return
      */
     @GetMapping("/findresult")
-    public ModelAndView findResult(ModelAndView mav
+    public ModelAndView findResult(ModelAndView mav,
+                                   @ModelAttribute("formModel") @Validated Item item,
+                                   BindingResult bindingResult
                                   ) {
         
-        // findresult.htmlを表示
-        mav.setViewName("findresult");
-        
-        
+        ModelAndView res = null;
 
-        // データベースから全データを取得
-        List<Item> list = repository.findAll();
-        
-        if (list.isEmpty()) {
-            // データが存在しない場合はエラーメッセージを表示
-            mav.addObject("message", "データが見つかりませんでした");
+        List<Item> list = null;
 
-        } else {
-            // データが存在する場合はタイトルを表示
-            mav.addObject("message", "削除するデータを選択してください");
+        System.out.println("削除確認の画面を表示する" + bindingResult.getFieldError());
+
+        if (!bindingResult.hasErrors()) {
+
+            mav.setViewName("findresult");
+
+            // バリデーションエラーがある場合は、エラーメッセージを表示してmain.htmlに戻る
+            //repository.saveAndFlush(item);
+
+            // データベースから全データを取得
+            list = repository.findAll();
+
+            if (list.isEmpty()) {
+
+                // データが存在しない場合はエラーメッセージを表示
+                mav.addObject("message", "データが見つかりませんでした");
+
+                } else {
+
+                    // データが存在する場合はタイトルを表示
+                    mav.addObject("message", "削除するデータを選択してください");
+                }
+                
+                res = mav;
+
+            } else {
+
+                repository.saveAndFlush(item);
+
+                Iterable<Item> items = repository.findAll();
+                mav.addObject("items", items);
+
+                res = mav;
+            }
+
+            res = mav;
         }
-        // dataに、全データを表示
-        mav.addObject("items", list);
+                                    
+        // findresult.htmlを表示
+        //mav.setViewName("findresult");
+        
+        
+        // if (list.isEmpty()) {
+        //     // データが存在しない場合はエラーメッセージを表示
+        //     mav.addObject("message", "データが見つかりませんでした");
 
-        return mav;
+        // } else {
+        //     // データが存在する場合はタイトルを表示
+        //     mav.addObject("message", "削除するデータを選択してください");
+        // }
+        // dataに、全データを表示
+        //mav.addObject("items", list);
+
+        return res;
     }
 
     /*
