@@ -90,6 +90,41 @@ public class ItemDAOPersonImpl implements ItemDAO<Item> {
 
     }
 
+    /**
+     * IDや名前でデータを検索する
+     */
+    @Override
+    public List<Item> find(String fstr) { 
+
+        // listの初期化
+        List<Item> list = null;
+        
+        // クエリ文を作成し、変数に格納（fstrをパラメータとして渡す）
+        String qstr = "from Item where id = :fid or name = :fname";
+
+        Long fid = 0L;
+        // idをLong型に変換し、できなければ例外をキャッチする
+        try { 
+
+            fid = Long.parseLong(fstr);
+
+        } catch (NumberFormatException e) { 
+
+            // 例外が発生した場合は、fidを0にする
+            e.printStackTrace();
+
+        }
+
+        Query query = entityManager.createQuery(qstr)
+                                    .setParameter("fid", fid)
+                                    .setParameter("fname", "%" + fstr + "%");
+
+        // クエリを実行し、結果をリストに格納する
+        list = query.getResultList();
+
+        return list;
+    }
+
     /*
     *   データの合計を取得するクエリを実行する
     */

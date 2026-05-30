@@ -115,8 +115,9 @@ public class SampleController {
      * @param mav
      * @return
      */
-    @GetMapping("/findresult")
+    @PostMapping("/findresult")
     public ModelAndView findResult(ModelAndView mav,
+                                   HttpServletRequest request,
                                    @ModelAttribute("formModel") @Validated Item item,
                                    BindingResult bindingResult
                                   ) {
@@ -133,18 +134,22 @@ public class SampleController {
             mav.setViewName("findresult");
 
             // データベースから全データを取得
-            list = dao.getAll();
+            list = repository.findAll();
+
+            mav.addObject("data", list);
+
+            System.out.println("削除確認の画面を表示する" + list);
 
             /*
             * リスト内が空かどうかを確認             * もし空であれば、データが存在しないことを意味する
              * その場合は、エラーメッセージを表示してmain.htmlに戻る
              * そうでなければ、削除確認の画面を表示する
             */ 
-            if (list.isEmpty()) {
+            if (list.isEmpty() || list == null) {
 
                 // データが存在しない場合はエラーメッセージを表示
                 //mav.addObject("message", "データが見つかりませんでした");
-
+                System.out.println("データが見つかりませんでした");
                 // main.htmlを表示（※「/」は、ルートパスをmain.htmlに設定しているため）
                 res = new ModelAndView("redirect:/");
                 
@@ -161,16 +166,19 @@ public class SampleController {
                 // findresult.htmlを表示
                 res = new ModelAndView("findresult");
 
+                System.out.println("削除確認" + res);
                 //repository.saveAndFlush(item);
                 
                 // findresult.htmlのdataに、全データを表示
-                res.addObject("data", list);
+                res.addObject("items", list);
             }
         
         } else {
 
             // バリデーションエラーがある場合は、エラーメッセージを表示してmain.htmlに戻る
             mav.setViewName("main");
+
+            System.out.println("入力に誤りがあります");
 
             res = new ModelAndView("main");
             //mav.addObject("message", "入力に誤りがあります");
@@ -216,6 +224,59 @@ public class SampleController {
         }
 
         return mav;
+
+    }
+
+    /**
+     * findresult.html：入力フォームから送信されたデータを処理する
+     * @param find_str
+     * @param mav
+     * @return
+     */
+    @RequestMapping(value = "/findresult/{find_str}", method = RequestMethod.POST)
+    public ModelAndView findResult(HttpServletRequest request, 
+                                   @PathVariable String find_str,
+                                   ModelAndView mav) {
+        
+        // フォームから送信されたリクエストパラメーターを取得
+        String param = request.getParameter("find_str");
+        
+        // find_result.htmlを表示
+        mav.setViewName("find_result");
+
+        // タイトルを表示
+        mav.addObject("title", "検索結果");
+        
+        // 入力値がなければ、エラーメッセージを表示してfindresult.htmlに戻る
+        if (param == "") {
+
+            // 入力値が無い場合
+            mav.addObject("msg", "検索する値を入力してください");
+
+            // findresult.htmlをリダイレクト表示
+            return new ModelAndView("redirect:/findresult");
+
+        } else {
+
+            // 入力値がある場合は、検索結果を表示するためのfind_result.htmlを表示する
+            mav.setViewName("find_result");
+
+            // タイトルを表示
+            mav.addObject("title", "在庫リストの検索結果");
+
+            // 検索する値を表示
+            mav.addObject("msg", "[" + param + "]の検索結果は・・・");
+
+            // 存在したら、クエリを実行して、検索結果を表示する
+            List<Item> list = dao.find(param);
+
+            // 検索結果を表示
+            mav.addObject("data", list);
+
+        }
+        
+        return mav;
+
     }
     
     /*

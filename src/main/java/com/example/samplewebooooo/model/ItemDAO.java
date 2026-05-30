@@ -13,6 +13,9 @@ public interface ItemDAO <T> extends Serializable {
 
     // 名前を取得
     public List<T> findByName(String name);
+    
+    // 名前、IDの検索
+    public List<Item> find(String fstr);
 
     // データを削除
     public void deleteById(long id);
