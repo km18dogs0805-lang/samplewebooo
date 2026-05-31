@@ -1,4 +1,6 @@
-package com.example.samplewebooooo;
+package com.example.samplewebooooo.model;
+
+import java.beans.JavaBean;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
