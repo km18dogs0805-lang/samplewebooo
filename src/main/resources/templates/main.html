@@ -27,6 +27,7 @@
                 <ul class="nav_list">
                     <li><a href="/main">Myページ</a></li>
                     <li><a href="/findresult">検索する</a></li>
+                    <li><a href="/rakuten">楽天で検索</a></li>
                 </ul>
             </nav>
 
@@ -37,6 +38,7 @@
     <p class="text-center mt-5" th:text="${msg}">在庫管理システムへようこそ！</p>
     
     <form method="post" action="result" th:object="${formModel}">
+        
         
         <!-- コンテンツのタイトル -->
         <div class="mb-3">

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /* 
 *  SampleController: コントローラークラス
 */
-@RestController
+@Controller
 public class SampleController {
 
     // データが格納されたリポジトリ
@@ -300,6 +300,17 @@ public class SampleController {
 
         // 合計金額を表示
         mav.addObject("totalPrice", totalPrice);
+
+        return mav;
+
+    }
+
+    @GetMapping("/rakuten")
+    public ModelAndView rakuten(@RequestParam("keyword") String keyword,
+                                ModelAndView mav) {
+
+        // rakuten.htmlを表示
+        mav.setViewName("rakuten");
 
         return mav;
 
