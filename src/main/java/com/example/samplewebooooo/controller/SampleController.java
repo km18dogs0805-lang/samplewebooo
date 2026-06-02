@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.result.view.Rendering;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.samplewebooooo.model.Item;
@@ -21,6 +22,7 @@ import com.example.samplewebooooo.repositories.ItemRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -305,15 +307,19 @@ public class SampleController {
 
     }
 
+    /**
+     * rakuten.html：楽天APIを使用して、商品を検索する
+     * @param keyword
+     * @param mav
+     * @return view: rakuten.html
+     *         builder: Rendering.view("rakuten").build()を使用して、rakuten.htmlを表示する
+     *         Mono: Mono.just()を使用して、非同期にrakuten.htmlを表示する
+     *         これにより、非同期にrakuten.htmlを表示することができるようになる
+     */
     @GetMapping("/rakuten")
-    public ModelAndView rakuten(@RequestParam("keyword") String keyword,
-                                ModelAndView mav) {
-
+    public Mono<Rendering> flux() {
         // rakuten.htmlを表示
-        mav.setViewName("rakuten");
-
-        return mav;
-
+        return Mono.just(Rendering.view("rakuten").build());
     }
 
 }
