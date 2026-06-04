@@ -20,9 +20,12 @@ import com.example.samplewebooooo.model.Item;
 import com.example.samplewebooooo.model.ItemDAOPersonImpl;
 import com.example.samplewebooooo.repositories.ItemRepository;
 
+import com.example.samplewebooooo.service.RakutenService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;
+import tools.jackson.databind.JsonNode;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +45,7 @@ public class SampleController {
     @Autowired
     ItemDAOPersonImpl dao;
 
+      
     /* 
     *   mainDisplay: メイン画面を表示する
     */
@@ -307,19 +311,31 @@ public class SampleController {
 
     }
 
+    @Autowired
+    private RakutenService rakutenSampleService;
+
     /**
      * rakuten.html：楽天APIを使用して、商品を検索する
-     * @param keyword
-     * @param mav
-     * @return view: rakuten.html
-     *         builder: Rendering.view("rakuten").build()を使用して、rakuten.htmlを表示する
-     *         Mono: Mono.just()を使用して、非同期にrakuten.htmlを表示する
-     *         これにより、非同期にrakuten.htmlを表示することができるようになる
+     * 楽天APIを使用して、商品を検索するためのエンドポイント
      */
-    @GetMapping("/rakuten")
-    public Mono<Rendering> flux() {
-        // rakuten.htmlを表示
-        return Mono.just(Rendering.view("rakuten").build());
+    @RequestMapping(value = "/rakuten", method = RequestMethod.GET)
+    public ModelAndView searchRakuten(ModelAndView mav) {
+
+        // 楽天APIを使用して、商品を検索するためのrakuten.htmlを表示
+        mav.setViewName("rakuten");
+
+        // タイトルを表示
+        mav.addObject("title", "楽天APIを使用して、商品を検索する");
+
+        // 検索結果を表示
+        Mono<String> result = rakutenSampleService.searchBooks("Java");
+        result.subscribe(json -> {
+            System.out.println("楽天APIの検索結果: " + json);
+            // ここでJSONを処理して、必要なデータを抽出することができます
+        });
+
+        return mav;
+
     }
 
 }
