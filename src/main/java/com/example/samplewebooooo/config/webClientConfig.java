@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example.samplewebooooo.config;
 
 import java.net.URI;
 
