@@ -21,7 +21,7 @@ import com.example.samplewebooooo.model.Item;
 import com.example.samplewebooooo.model.ItemDAOPersonImpl;
 import com.example.samplewebooooo.repositories.ItemRepository;
 
-import com.example.samplewebooooo.service.RakutenService;
+import com.example.samplewebooooo.service.yahooService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -314,7 +314,7 @@ public class SampleController {
     }
 
     @Autowired
-    private RakutenService rakutenSampleService;
+    private yahooService Yahooservice;
 
     /**
      * rakuten.htmlを表示：楽天APIを使用して、商品を検索する
@@ -322,14 +322,12 @@ public class SampleController {
      * @param mav
      * @return
      */
-    @Value("${rakuten.api.base-url}")
+    @Value("${yahoo.api.base-url}")
     private String baseUrl;
 
-    @Value("${rakuten.api.application-id}")
+    @Value("${yahoo.api.client-id}")
     private String applicationId;
 
-    @Value("${rakuten.api.access-key}")
-    private String accessKey;
 
     @RequestMapping(value = "/rakuten", method = RequestMethod.GET)
     public ModelAndView searchRakuten(ModelAndView mav) {
@@ -339,7 +337,6 @@ public class SampleController {
 
         System.out.println("楽天APIを使用して、商品を検索する" + baseUrl );
         System.out.println("Application ID: " + applicationId);
-        System.out.println("Access Key: " + accessKey);
 
         // タイトルを表示
         mav.addObject("title", "楽天APIを使用して、商品を検索する");
@@ -347,29 +344,5 @@ public class SampleController {
         return mav;
 
     }
-
-    /**
-     * rakuten.htmlのフォームから送信されたデータを処理する
-     */
-    @RequestMapping(value = "/rakuten/{keyword}", method = RequestMethod.POST)
-    public Flux<String> searchRakutenItems(@PathVariable String keyword) {
-
-        // 楽天APIを使用して、商品を検索するためのrakuten.htmlを表示
-        //mav.setViewName("rakuten");
-
-        System.out.println("楽天APIを使用して、商品を検索する" + keyword);
-        System.out.println("Application ID: " + applicationId);
-        System.out.println("Access Key: " + accessKey);
-
-        // タイトルを表示
-        //mav.addObject("title", "楽天APIを使用して、商品を検索する");
-
-        // 楽天APIを使用して、商品を検索する
-        Mono<String> response = rakutenSampleService.searchItems();
-
-        // レスポンスを表示
-        return response.flux();
-    }
-    
 
 }
