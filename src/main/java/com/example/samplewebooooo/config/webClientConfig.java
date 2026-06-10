@@ -12,6 +12,9 @@ public class webClientConfig {
     @Value("${yahoo.api.base-url}")
     private String baseUrl;
 
+    @Value("${yahoo.api.client-id}")
+    private String appId;
+
     @Bean
     public WebClient yahooWebClient() {
         return WebClient.builder()

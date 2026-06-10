@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class yahooServiseWeb {
@@ -27,44 +28,46 @@ public class yahooServiseWeb {
     /**
      * Yahoo ショッピング API で商品を検索し、結果リストを返す
      *
+     * URL例: https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch
+     *         ?appid={client-id}&query={keyword}&results=20
+     *
      * @param keyword 検索キーワード
      * @return 商品情報 (name, price, url) のリスト
      */
     @SuppressWarnings("unchecked")
     public List<Map<String, String>> searchItem(String keyword) {
 
+        // application.properties の base-url と client-id を使って URL を組み立てる
+        String url = UriComponentsBuilder.fromUriString(baseUrl)
+                .queryParam("appid", appId)
+                .queryParam("query", keyword)
+                .queryParam("results", 20)
+                .build()
+                .toUriString();
+
+        System.out.println("Yahoo API リクエストURL: " + url);
+
         // API レスポンス全体を Map として受け取る
         Map<String, Object> response = webClient
                 .get()
-                .uri(uriBuilder -> uriBuilder
-                        .scheme("https")
-                        .host("shopping.yahooapis.jp")
-                        .path("/ShoppingWebService/V3/itemSearch")
-                        .queryParam("appid", appId)
-                        .queryParam("query", keyword)
-                        .queryParam("results", 20)  // 取得件数
-                        .build())
+                .uri(url)
                 .retrieve()
                 .bodyToMono(Map.class)
                 .block();
 
         List<Map<String, String>> items = new ArrayList<>();
-
         if (response == null) return items;
 
-        // hits 配列を取得
-        Map<String, Object> hits = (Map<String, Object>) response.get("hits");
-        if (hits == null) return items;
-
-        List<Map<String, Object>> hitList = (List<Map<String, Object>>) hits.get("hit");
+        // V3 の hits は Map ではなく直接 List（配列）
+        List<Map<String, Object>> hitList = (List<Map<String, Object>>) response.get("hits");
         if (hitList == null) return items;
 
         for (Map<String, Object> hit : hitList) {
-            String name  = String.valueOf(hit.getOrDefault("name", "（名称不明）"));
+            String name  = String.valueOf(hit.getOrDefault("name",  "（名称不明）"));
             String price = String.valueOf(hit.getOrDefault("price", "0"));
-            String url   = String.valueOf(hit.getOrDefault("url",  "#"));
+            String itemUrl = String.valueOf(hit.getOrDefault("url", "#"));
 
-            items.add(Map.of("name", name, "price", price, "url", url));
+            items.add(Map.of("name", name, "price", price, "url", itemUrl));
         }
 
         return items;
