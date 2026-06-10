@@ -41,7 +41,7 @@ public class yahooServiseWeb {
         String url = UriComponentsBuilder.fromUriString(baseUrl)
                 .queryParam("appid", appId)
                 .queryParam("query", keyword)
-                .queryParam("results", 20)
+                .queryParam("results", 50)
                 .build()
                 .toUriString();
 
