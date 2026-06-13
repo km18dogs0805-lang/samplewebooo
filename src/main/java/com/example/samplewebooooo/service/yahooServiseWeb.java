@@ -61,16 +61,30 @@ public class yahooServiseWeb {
         if (response == null) return items;
 
         // V3 の hits は Map ではなく直接 List（配列） Map<キーの型, 値の型>
+        // responseで得られたデータを、hitList変数に格納する
         List<Map<String, Object>> hitList = (List<Map<String, Object>>) response.get("hits");
         if (hitList == null) return items;
 
-        // JSONから得た値を、String型に変換する（※Null値でも例外を発生させない）
+        // JSONから得た値を、String型に変換し、キーとして設定する（※Null値でも例外を発生させない）
+        /**
+         * ※以下のリスト型配列が渡される
+         * ※各値を、Map<String, Object>に格納できそう
+         *  {
+         *    index: 0,
+         *    name:  "（名称不明）"
+         *    price: 0,
+         *    itemUrl: "#"
+         *  }
+         */
         for (Map<String, Object> hit : hitList) {
+            
+            String index = String.valueOf(hit.getOrDefault("index", "0"));
             String name  = String.valueOf(hit.getOrDefault("name",  "（名称不明）"));
             String price = String.valueOf(hit.getOrDefault("price", "0"));
             String itemUrl = String.valueOf(hit.getOrDefault("url", "#"));
 
-            items.add(Map.of("name", name, "price", price, "url", itemUrl));
+            // まとめて items に追加
+            items.add(Map.of("index",index,"name", name, "price", price, "url", itemUrl));
         }
 
         return items;

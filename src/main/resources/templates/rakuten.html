@@ -53,6 +53,7 @@
         <table class="table table-striped mt-2">
             <thead class="table-danger">
                 <tr>
+                    <th>ID</th>
                     <th>商品名</th>
                     <th>価格（円）</th>
                     <th>リンク</th>
@@ -60,6 +61,7 @@
             </thead>
             <tbody>
                 <tr th:each="item : ${items}">
+                    <td th:text="${item['index']}"></td>
                     <td th:text="${item['name']}"></td>
                     <td th:text="${#numbers.formatInteger(item['price'], 1, 'COMMA')} + ' 円'"></td>
                     <td>
