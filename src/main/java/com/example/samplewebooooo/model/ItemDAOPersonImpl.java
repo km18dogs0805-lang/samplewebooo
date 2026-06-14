@@ -45,7 +45,8 @@ public class ItemDAOPersonImpl implements ItemDAO<Item> {
     public Item findById(long id) {
 
         // idに対応するデータを取得するクエリを実行する
-        return (Item)entityManager.createQuery("from Item where id = " + id).getSingleResult();
+        return (Item)entityManager.createQuery("from Item where id = :id")
+                                                .setParameter("id", id);
     }
 
     /*

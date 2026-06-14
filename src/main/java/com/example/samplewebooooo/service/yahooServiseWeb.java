@@ -60,7 +60,7 @@ public class yahooServiseWeb {
         // 検索結果が無い場合は、空を表示
         if (response == null) return items;
 
-        // V3 の hits は Map ではなく直接 List（配列） Map<キーの型, 値の型>
+        // get('hits')で、キーから値を取り出す。 Map<キーの型, 値の型>
         // responseで得られたデータを、hitList変数に格納する
         List<Map<String, Object>> hitList = (List<Map<String, Object>>) response.get("hits");
         if (hitList == null) return items;

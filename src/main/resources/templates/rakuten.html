@@ -44,12 +44,17 @@
     <div th:if="${msg}" class="alert alert-warning" th:text="${msg}"></div>
 
     <!-- 検索結果テーブル -->
-     <!-- th:object の範囲内のため、＄ではなく＃ -->
+     <!-- #は、ユーティリティオブジェクトで、組み込みのヘルパーオブジェクトにアクセスできる -->
+      <!-- リストの操作 -->
     <div th:if="${items != null and !#lists.isEmpty(items)}">
         <p class="text-muted">
             「<strong th:text="${keyword}"></strong>」の検索結果：
             <span th:text="${#lists.size(items)}"></span> 件
         </p>
+        <!-- 次へボタンでリストの件数を更新する -->
+        <button class="btn btn-danger text-white px-4" type="submit">
+            次へ
+        </button>
         <table class="table table-striped mt-2">
             <thead class="table-danger">
                 <tr>
@@ -60,9 +65,11 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- itemsに格納されたプロパティを代入（ブラケット記法） -->
                 <tr th:each="item : ${items}">
                     <td th:text="${item['index']}"></td>
                     <td th:text="${item['name']}"></td>
+                    <!-- 価格を、カンマ区切りで出力 -->
                     <td th:text="${#numbers.formatInteger(item['price'], 1, 'COMMA')} + ' 円'"></td>
                     <td>
                         <a th:href="${item['url']}" target="_blank" class="btn btn-sm btn-outline-danger">
