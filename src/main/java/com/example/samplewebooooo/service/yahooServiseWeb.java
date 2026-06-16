@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ *  検索結果を出力するクラス
+ */
 @Service
 public class yahooServiseWeb {
 
@@ -53,17 +56,17 @@ public class yahooServiseWeb {
                 .retrieve()
                 .bodyToMono(Map.class)
                 .block();
-        System.out.println("responseの中身は、、" + response.get("totalResultsAvailable"));
 
         // Mapに格納したデータ（レスポンスされた結果）
         List<Map<String, String>> items = new ArrayList<>();
 
-        // 検索結果が無い場合は、空を表示
+        // キーが取得できない場合
         if (response == null) return items;
 
-        // get('hits')で、キーから値を取り出す。 Map<キーの型, 値の型>
         // responseで得られたデータを、hitList変数に格納する
         List<Map<String, Object>> hitList = (List<Map<String, Object>>) response.get("hits");
+
+        // 検索結果がゼロの場合
         if (hitList == null) return items;
 
         // JSONから得た値を、String型に変換し、キーとして設定する（※Null値でも例外を発生させない）

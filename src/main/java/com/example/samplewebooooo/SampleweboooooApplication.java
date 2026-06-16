@@ -12,8 +12,9 @@ public class SampleweboooooApplication {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
 		SpringApplication.run(SampleweboooooApplication.class, args);
-		System.out.println("実行エリート官僚！！");
+
 	}
 	/**
 	 * Rest通信を行うためのクラス（WebClientなど、Http通信を行う）
@@ -21,7 +22,9 @@ public class SampleweboooooApplication {
 	 */
 	@Bean
 	public RestTemplate restTemplate() {
+
 		return new RestTemplate();
+		
 	}
 
 }
