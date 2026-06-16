@@ -41,7 +41,7 @@ public class yahooServiseWeb {
         String url = UriComponentsBuilder.fromUriString(baseUrl)
                 .queryParam("appid", appId)
                 .queryParam("query", keyword)
-                .queryParam("results", 50)
+                
                 .build()
                 .toUriString();
 
@@ -53,6 +53,7 @@ public class yahooServiseWeb {
                 .retrieve()
                 .bodyToMono(Map.class)
                 .block();
+        System.out.println("responseの中身は、、" + response.get("totalResultsAvailable"));
 
         // Mapに格納したデータ（レスポンスされた結果）
         List<Map<String, String>> items = new ArrayList<>();
