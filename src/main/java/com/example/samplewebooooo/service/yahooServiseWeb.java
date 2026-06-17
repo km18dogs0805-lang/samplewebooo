@@ -82,11 +82,17 @@ public class yahooServiseWeb {
          */
         for (Map<String, Object> hit : hitList) {
             
+            /**
+             *  値が使用できない場合に、使用する値
+             */
             String index = String.valueOf(hit.getOrDefault("index", "0"));
+            
             String name  = String.valueOf(hit.getOrDefault("name",  "（名称不明）"));
+            
             String price = String.valueOf(hit.getOrDefault("price", "0"));
+            
             String itemUrl = String.valueOf(hit.getOrDefault("url", "#"));
-
+            
             // まとめて items に追加
             items.add(Map.of("index",index,"name", name, "price", price, "url", itemUrl));
         }
