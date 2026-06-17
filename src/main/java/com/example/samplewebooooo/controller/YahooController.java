@@ -59,16 +59,19 @@ public class YahooController {
 
     @RequestMapping(value = "/yahoo/search", method = RequestMethod.POST)
     public ModelAndView searchItems(@RequestParam String keyword,
+                                    @RequestParam long number,
                                     ModelAndView mav) {
         mav.setViewName("yahoo");
 
         try {
 
             // List型の変数に格納
-            List<Map<String, String>> items = yWeb.searchItem(keyword);
+            List<Map<String, String>> items = yWeb.searchItem(keyword, number);
+            
             System.out.println("Yahoo API 検索結果件数: " + items.size());
 
             mav.addObject("keyword", keyword);
+            
             mav.addObject("items", items);
 
             if (items.isEmpty()) {

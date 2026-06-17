@@ -1,6 +1,7 @@
 package com.example.samplewebooooo.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,13 +39,13 @@ public class yahooServiseWeb {
      * @return items 商品情報 (name, price, url) のリスト
      */
     @SuppressWarnings("unchecked")
-    public List<Map<String, String>> searchItem(String keyword) {
+    public List<Map<String, String>> searchItem(String keyword, long number) {
 
         // application.properties の base-url と client-id を使って URL を組み立てる
         String url = UriComponentsBuilder.fromUriString(baseUrl)
                 .queryParam("appid", appId)
                 .queryParam("query", keyword)
-                
+                .queryParam("results", number)
                 .build()
                 .toUriString();
 
@@ -69,31 +70,26 @@ public class yahooServiseWeb {
         // 検索結果がゼロの場合
         if (hitList == null) return items;
 
-        // JSONから得た値を、String型に変換し、キーとして設定する（※Null値でも例外を発生させない）
-        /**
-         * ※以下のリスト型配列が渡される
-         * ※各値を、Map<String, Object>に格納できそう
-         *  {
-         *    index: 0,
-         *    name:  "（名称不明）"
-         *    price: 0,
-         *    itemUrl: "#"
-         *  }
-         */
+        // JSONから得た値を、String型に変換し、キーとして設定する
         for (Map<String, Object> hit : hitList) {
+
+            // indexが存在しない：：０を出力
+            Object defIndex = hit.getOrDefault("index", "0");
+            String index = String.valueOf(defIndex);
+
+            // nameが存在しない：：（名称不明）を出力
+            Object defName = hit.getOrDefault("name",  "（名称不明）");
+            String name  = String.valueOf(defName);
+
+            // priceが存在しない：：０を出力
+            Object defPrice = hit.getOrDefault("price", "0");
+            String price = String.valueOf(defPrice);
             
-            /**
-             *  値が使用できない場合に、使用する値
-             */
-            String index = String.valueOf(hit.getOrDefault("index", "0"));
+            // urlが存在しない：：＃を出力
+            Object defItemUrl = hit.getOrDefault("url", "#");
+            String itemUrl = String.valueOf(defItemUrl);
             
-            String name  = String.valueOf(hit.getOrDefault("name",  "（名称不明）"));
-            
-            String price = String.valueOf(hit.getOrDefault("price", "0"));
-            
-            String itemUrl = String.valueOf(hit.getOrDefault("url", "#"));
-            
-            // まとめて items に追加
+            // マッピングされたデータをまとめて List に追加
             items.add(Map.of("index",index,"name", name, "price", price, "url", itemUrl));
         }
 
