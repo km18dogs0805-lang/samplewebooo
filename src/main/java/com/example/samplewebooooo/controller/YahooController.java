@@ -37,10 +37,19 @@ public class YahooController {
 
     @RequestMapping(value = "/yahoo", method = RequestMethod.GET)
     public ModelAndView searchForm(ModelAndView mav) {
+
+        // yahoo.html
         mav.setViewName("yahoo");
+
+        // titleに文字列を挿入
         mav.addObject("title", "Yahoo ショッピングで商品を検索する");
+
+        // baseUrlを表示（デバッグ用）
         System.out.println("baseUrl: " + baseUrl);
+
+        // appIdを挿入（デバッグ用）
         System.out.println("applicationId: " + applicationId);
+
         return mav;
     }
 
@@ -54,6 +63,8 @@ public class YahooController {
         mav.setViewName("yahoo");
 
         try {
+
+            // List型の変数に格納
             List<Map<String, String>> items = yWeb.searchItem(keyword);
             System.out.println("Yahoo API 検索結果件数: " + items.size());
 
