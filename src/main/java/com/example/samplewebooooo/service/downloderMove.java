@@ -39,7 +39,8 @@ public class downloderMove {
         // yt-dlpを外部コマンドから実行ProcessBuilder
         ProcessBuilder builder = new ProcessBuilder(
                 ytDlpPath,
-                "-f", "bestvideo[height<=720]+bestaudio/best[height<=720]",     
+                "-f", "bestvideo[height<=720]+bestaudio/best[height<=720]",
+                "--merge-output-format", "mp4", 
                 "-o", outputDir + "/%(title)s.%(ext)s", 
                 url
         );
@@ -65,8 +66,9 @@ public class downloderMove {
         int exitCode = process.waitFor();
 
         if (exitCode != 0) {
-
-            throw new RuntimeException("yt-dlp failed with exit code " + exitCode);
+            System.out.println("=== yt-dlp output===");
+            output.forEach(System.out::println);
+            throw new RuntimeException("yt-dlp failed with exit code " + exitCode + "\n" + String.join("\n", output));
 
         }
 
