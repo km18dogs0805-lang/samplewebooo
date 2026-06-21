@@ -23,6 +23,7 @@ public class downloderMove {
      */
     public List<String> downloadVideo(String url, String outputDir) throws Exception {
         
+        // exeファイルを実行
         File ytDlpExe = new ClassPathResource("tools/yt-dlp.exe").getFile();
         String ytDlpPath = ytDlpExe.getAbsolutePath();
 
@@ -41,7 +42,9 @@ public class downloderMove {
                 ytDlpPath,
                 "-f", "bestvideo[height<=720]+bestaudio/best[height<=720]",
                 "--merge-output-format", "mp4",
-                "--extractor-args", "youtube:player_client=android",
+                //"--extractor-args", "youtube:player_client=android",
+                "--extractor-args", "generic:impersonate",
+                "--no-cookies",
                 "-o", outputDir + "/%(title)s.%(ext)s", 
                 url
         );
