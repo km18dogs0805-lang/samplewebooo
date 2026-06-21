@@ -40,7 +40,8 @@ public class downloderMove {
         ProcessBuilder builder = new ProcessBuilder(
                 ytDlpPath,
                 "-f", "bestvideo[height<=720]+bestaudio/best[height<=720]",
-                "--merge-output-format", "mp4", 
+                "--merge-output-format", "mp4",
+                "--extractor-args", "youtube:player_client=android",
                 "-o", outputDir + "/%(title)s.%(ext)s", 
                 url
         );
@@ -67,7 +68,7 @@ public class downloderMove {
 
         if (exitCode != 0) {
             System.out.println("=== yt-dlp output===");
-            output.forEach(System.out::println);
+            
             throw new RuntimeException("yt-dlp failed with exit code " + exitCode + "\n" + String.join("\n", output));
 
         }
