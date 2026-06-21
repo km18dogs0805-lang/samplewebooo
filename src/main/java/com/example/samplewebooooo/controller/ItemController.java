@@ -20,6 +20,8 @@ import com.example.samplewebooooo.repositories.ItemRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 /**
  * ItemController: 在庫アイテムの CRUD 操作を担当するコントローラー
@@ -220,4 +222,7 @@ public class ItemController {
         
         return mav;
     }
+
+   
+    
 }

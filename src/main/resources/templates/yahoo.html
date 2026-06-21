@@ -65,6 +65,9 @@
             <tbody>
                 <!-- itemsに格納されたプロパティを代入 -->
                 <tr th:each="item : ${items}">
+                    <td>
+                        <input class="form-check-input" type="checkbox" name="check1" />
+                    </td>
                     <td th:text="${item['index']}"></td>
                     <td th:text="${item['name']}"></td>
                     <!-- 価格を、カンマ区切りで出力 -->
