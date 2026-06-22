@@ -36,6 +36,9 @@ public class downloderMove {
             Files.createDirectories(dirPath); // フォルダが無ければ自動作成
         }
 
+        // archivePathを作成
+        
+
         List<String> output = new ArrayList<>();
         // yt-dlpを外部コマンドから実行ProcessBuilder
         ProcessBuilder builder = new ProcessBuilder(
@@ -44,6 +47,7 @@ public class downloderMove {
                 "--merge-output-format", "mp4",
                 //"--extractor-args", "youtube:player_client=android",
                 "--extractor-args", "generic:impersonate",
+                "--download-archive", archivePath,
                 "--no-cookies",
                 "-o", outputDir + "/%(title)s.%(ext)s", 
                 url
@@ -75,6 +79,8 @@ public class downloderMove {
             throw new RuntimeException("yt-dlp failed with exit code " + exitCode + "\n" + String.join("\n", output));
 
         }
+
+        // DownloadHistoryを用いて、履歴として保存
 
         return output;
     
