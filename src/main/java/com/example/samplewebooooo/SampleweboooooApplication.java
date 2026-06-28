@@ -1,5 +1,7 @@
 package com.example.samplewebooooo;
 
+import java.io.ObjectInputFilter.Config;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +16,7 @@ public class SampleweboooooApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(SampleweboooooApplication.class, args);
-
+		System.out.println("実行官僚" + "\n" + Config.getSerialFilter() + "\n" + Config.getSerialFilterFactory());
 	}
 	/**
 	 * Rest通信を行うためのクラス（WebClientなど、Http通信を行う）
@@ -28,3 +30,5 @@ public class SampleweboooooApplication {
 	}
 
 }
+
+
